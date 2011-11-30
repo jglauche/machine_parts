@@ -11,7 +11,7 @@ file="extruder.dxf";
 spring_length_min=13.5;
 spring_dia=7; 
 bolt_dia=4.4;
-ptfe_hole=10.7;
+ptfe_hole=5.6; // 10.7;
 
 
 module motor_mount(){
@@ -63,7 +63,7 @@ translate(v=[-4.5,18,18]) rotate(a=90,v=[1,0,0]) cylinder(h=10, r=ptfe_hole/2);
 // mounting hole
 //translate(v=[10.5,24-5,18]) rotate(a=90,v=[1,0,0]) hexagon(bot_hex,15+10);	
 
-#translate(v=[16.5,15,18]) rotate(a=90,v=[1,0,0]) cylinder(h=40, r=2.2);	
+translate(v=[16.5,15,18]) rotate(a=90,v=[1,0,0]) cylinder(h=40, r=2.2);	
 
 
 
@@ -102,11 +102,19 @@ difference(){
 
 
 
-translate(v=[-90,5,0]) motor_mount();
 
+module body_with_mount(){
 union(){
 	main_body();
 	translate(v=[-40.5,12,0]) rotate(a=90,v=[1,0,0]) sc_mount();
-
-
 }
+}
+
+
+
+//translate(v=[-90,5,0]) motor_mount();
+body_with_mount();
+translate(v=[-25,85,0]) rotate(a=180,v=[0,0,1]) body_with_mount();
+
+
+
