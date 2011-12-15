@@ -65,6 +65,7 @@ motor_mount_part();
 }
 // driven gear
 #translate(v=[motor_size/2,(gear_module*driven_gear_teeth),7]){
-translate(v=[0,0,10]) cylinder(r=(gear_module*driven_gear_teeth)/2,h=driven_gear_hub_length);
+	translate(v=[0,0,10]) cylinder(r=(gear_module*driven_gear_teeth)/2,h=driven_gear_hub_length);
+	translate(v=[0,0,-30])  cylinder(r=5/2,h=50);
 }
 
