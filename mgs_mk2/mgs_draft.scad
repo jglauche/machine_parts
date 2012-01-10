@@ -31,6 +31,11 @@ motor_shaft_dia = 5;
 mount_thickness = 4;
 
 
+filament_diameter = 3;
+
+
+
+
 module motor_mount_part(){
 	difference(){
 		cube(size=[motor_size,motor_size+16,mount_thickness]);
@@ -100,6 +105,8 @@ translate(v=[motor_size/2,(gear_module*driven_gear_teeth),10]){
 	}
 }	
 
+// filament
+translate(v=[-30,46,18]) rotate(a=90,v=[0,1,0])  color([0.2,0.6,0.2]) cylinder(r=filament_diameter/2,h=100);
 
 
 
