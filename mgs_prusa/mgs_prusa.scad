@@ -27,7 +27,7 @@ filament_drive_gear_hub_dia = 10;
 shafts_distance=(gear_module*(driven_gear_teeth+motor_gear_teeth))/2;
 echo(shafts_distance);
 
-bearing625_OD=16.1;
+bearing625_OD=16.25;
 bearing625_height=5;
 bearing_wall=1.5;
 
@@ -45,11 +45,11 @@ hotend_diameter = 16.55;
 
 
 rotate(a=90,v=[0,1,0]){
-    translate([-shafts_distance/2,0,-(motor_height)/2])nema();
-	translate([-shafts_distance/2,0,5.5])motor_gear();
-	translate([shafts_distance/2,0,-0.1])driven_gear();
-	translate([-100,filament_hole_offset,filament_hole_zpos])rotate([0,90,0])filament();
-	translate([shafts_distance/2,3+(filament_drive_gear_teeth*gear_module+bearing625_OD)/2,21.4])rotate([0,0,0])bearing_625();//idler bearing
+//    translate([-shafts_distance/2,0,-(motor_height)/2])nema();
+//	translate([-shafts_distance/2,0,5.5])motor_gear();
+//	translate([shafts_distance/2,0,-0.1])driven_gear();
+//	translate([-100,filament_hole_offset,filament_hole_zpos])rotate([0,90,0])filament();
+//	translate([shafts_distance/2,3+(filament_drive_gear_teeth*gear_module+bearing625_OD)/2,21.4])rotate([0,0,0])bearing_625();//idler bearing
 	translate([shafts_distance/2,0,0])mounting_plate();
 }
 
@@ -69,8 +69,8 @@ module mounting_plate(){
 	
 			#translate([(gear_module*driven_gear_teeth+2+base_plate_height)/2-0.01,0,filament_hole_zpos])color(PlasticBlue)base_plate();
 		}
-		translate([0,0,4])cylinder(r=pdiam(bearing625_OD)/2,h=m5_cap_H+bearing625_height+1);//bearing cutout
-		translate([0,0,m5_cap_H+bearing625_height+((1.0+0.05)*3)+driven_gear_length+driven_gear_hub_length+filament_drive_gear_length+filament_drive_gear_hub_length+bearing_wall])cylinder(r=pdiam(bearing625_OD)/2,h=m5_cap_H+bearing625_height+1);//bearing cutout
+		translate([0,0,6])cylinder(r=pdiam(bearing625_OD)/2,h=m5_cap_H+bearing625_height+1);//bearing cutout
+		translate([0,0,bearing625_height+1+driven_gear_length+driven_gear_hub_length+filament_drive_gear_length+filament_drive_gear_hub_length+bearing_wall])cylinder(r=pdiam(bearing625_OD)/2,h=m5_cap_H+bearing625_height+1);//bearing cutout
 		translate([0,0,-1])cylinder(r=(bearing625_OD-3)/2,h=driven_shaft_length*2);//driven shaft cutout
 
 		translate([-shafts_distance,0,0]){
