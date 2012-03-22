@@ -27,9 +27,9 @@ filament_drive_gear_hub_dia = 10;
 shafts_distance=(gear_module*(driven_gear_teeth+motor_gear_teeth))/2;
 echo(shafts_distance);
 
-bearing625_OD=16;
+bearing625_OD=16.1;
 bearing625_height=5;
-bearing_wall=2;
+bearing_wall=1.5;
 
 mounting_plate_A_height=5;
 
@@ -41,15 +41,15 @@ filament_OD=3;
 filament_hole_zpos=24;
 filament_hole_offset=(filament_OD+filament_drive_gear_teeth*gear_module)/2;
 
-hotend_diameter = 16.25;
+hotend_diameter = 16.55;
 
 
 rotate(a=90,v=[0,1,0]){
-	//translate([-shafts_distance/2,0,-(motor_height)/2])nema();
-	//translate([-shafts_distance/2,0,5.5])motor_gear();
-	//translate([shafts_distance/2,0,-0.1])driven_gear();
-	//translate([-100,filament_hole_offset,filament_hole_zpos])rotate([0,90,0])filament();
-	//translate([shafts_distance/2,3+(filament_drive_gear_teeth*gear_module+608_diam)/2,21.4])rotate([0,0,0])bearing_608();//idler bearing
+	translate([-shafts_distance/2,0,-(motor_height)/2])nema();
+	translate([-shafts_distance/2,0,5.5])motor_gear();
+	translate([shafts_distance/2,0,-0.1])driven_gear();
+	translate([-100,filament_hole_offset,filament_hole_zpos])rotate([0,90,0])filament();
+	translate([shafts_distance/2,3+(filament_drive_gear_teeth*gear_module+bearing625_OD)/2,21.4])rotate([0,0,0])bearing_625();//idler bearing
 	translate([shafts_distance/2,0,0])mounting_plate();
 }
 
@@ -59,21 +59,22 @@ module mounting_plate(){
 			translate([-shafts_distance,0,mounting_plate_A_height/2])color(PlasticBlue)cube([motor_OD,gear_module*driven_gear_teeth+2,mounting_plate_A_height],center=true);//motor mount
 			translate([0,0,mounting_plate_A_height/2])color(PlasticGreen)cube([gear_module*driven_gear_teeth+2,gear_module*driven_gear_teeth+2,mounting_plate_A_height],center=true);//motor mount
 	
-			//bearing holder:
+			//bearing holder/motor:
 			translate([(gear_module*driven_gear_teeth+2)/4,0,(m5_cap_H+bearing625_height+2)/2])color(PlasticRed)cube([(gear_module*driven_gear_teeth+2)/2,bearing625_OD*1.3,m5_cap_H+bearing625_height+bearing_wall],center=true);
 			translate([0,0,0])color(PlasticRed)cylinder(r=bearing625_OD*1.3/2,h=m5_cap_H+bearing625_height+bearing_wall);
-			//bearing holder
-			translate([(gear_module*driven_gear_teeth+2)/4,0,m5_cap_H+bearing625_height+((1.0+0.05)*3)+driven_gear_length+driven_gear_hub_length+filament_drive_gear_length+filament_drive_gear_hub_length+((m5_cap_H+bearing625_height+2)/2)])color(PlasticRed)cube([(gear_module*driven_gear_teeth+2)/2,bearing625_OD*1.3,m5_cap_H+bearing625_height+bearing_wall],center=true);
-			translate([0,0,m5_cap_H+bearing625_height+((1.0+0.05)*3)+driven_gear_length+driven_gear_hub_length+filament_drive_gear_length+filament_drive_gear_hub_length])color(PlasticRed)cylinder(r=bearing625_OD*1.3/2,h=m5_cap_H+bearing625_height+bearing_wall);
+
+			//bearing holder/idler
+			translate([(gear_module*driven_gear_teeth+2)/4,0,m5_cap_H+bearing625_height+((1.0+0.05)*3)+driven_gear_length+driven_gear_hub_length+filament_drive_gear_length+filament_drive_gear_hub_length+((m5_cap_H+bearing625_height+2)/2)])color(PlasticRed)cube([(gear_module*driven_gear_teeth+2)/2,bearing625_OD*1.5,m5_cap_H+bearing625_height+bearing_wall],center=true);
+			translate([0,0,m5_cap_H+bearing625_height+((3.25+0.15))+driven_gear_length+driven_gear_hub_length+filament_drive_gear_length+filament_drive_gear_hub_length])color(PlasticRed)cylinder(r=bearing625_OD*1.5/2,h=m5_cap_H+bearing625_height+bearing_wall);
 	
 			translate([(gear_module*driven_gear_teeth+2+base_plate_height)/2-0.01,0,filament_hole_zpos])color(PlasticBlue)base_plate();
 		}
 		translate([0,0,-1])cylinder(r=pdiam(bearing625_OD)/2,h=m5_cap_H+bearing625_height+1);//bearing cutout
 		translate([0,0,m5_cap_H+bearing625_height+((1.0+0.05)*3)+driven_gear_length+driven_gear_hub_length+filament_drive_gear_length+filament_drive_gear_hub_length+bearing_wall])cylinder(r=pdiam(bearing625_OD)/2,h=m5_cap_H+bearing625_height+1);//bearing cutout
-		translate([0,0,-1])cylinder(r=(bearing625_OD-4)/2,h=driven_shaft_length*2);//driven shaft cutout
+		translate([0,0,-1])cylinder(r=(bearing625_OD-3)/2,h=driven_shaft_length*2);//driven shaft cutout
 
 		translate([-shafts_distance,0,0]){
-			translate([0,0,-0.5])cylinder(r=pdiam(motor_flange_dia+1)/2,h=mounting_plate_A_height+1); // motor flange cutout
+			translate([0,0,-0.5])cylinder(r=pdiam(motor_flange_dia+2)/2,h=mounting_plate_A_height+1); // motor flange cutout
 			//mounting screw holes for motor:
 			translate([motor_mounting_hole_distance/2,motor_mounting_hole_distance/2,-0.5])cylinder(r=motor_mounting_hole_diam/2,h=mounting_plate_A_height+1);
 			translate([-motor_mounting_hole_distance/2,motor_mounting_hole_distance/2,-0.5])cylinder(r=motor_mounting_hole_diam/2,h=mounting_plate_A_height+1);
