@@ -45,12 +45,13 @@ hotend_diameter = 16.55;
 
 
 rotate(a=90,v=[0,1,0]){
-//    translate([-shafts_distance/2,0,-(motor_height)/2])nema();
-//	translate([-shafts_distance/2,0,5.5])motor_gear();
-//	translate([shafts_distance/2,0,-0.1])driven_gear();
-//	translate([-100,filament_hole_offset,filament_hole_zpos])rotate([0,90,0])filament();
-//	translate([shafts_distance/2,3+(filament_drive_gear_teeth*gear_module+bearing625_OD)/2,21.4])rotate([0,0,0])bearing_625();//idler bearing
+    translate([-shafts_distance/2,0,-(motor_height)/2])nema();
+	translate([-shafts_distance/2,0,5.5])motor_gear();
+	translate([shafts_distance/2,0,-0.1])driven_gear();
+	translate([-100,filament_hole_offset,filament_hole_zpos])rotate([0,90,0])filament();
+	translate([shafts_distance/2,3+(filament_drive_gear_teeth*gear_module+bearing625_OD)/2,21.4])rotate([0,0,0])bearing_625();//idler bearing
 	translate([shafts_distance/2,0,0])mounting_plate();
+	
 }
 
 module mounting_plate(){
@@ -69,6 +70,9 @@ module mounting_plate(){
 	
 			#translate([(gear_module*driven_gear_teeth+2+base_plate_height)/2-0.01,0,filament_hole_zpos])color(PlasticBlue)base_plate();
 		}
+		// hole extend for extruder mount
+		#translate([(gear_module*driven_gear_teeth+2+base_plate_height)/2-0.01-15,filament_hole_offset,filament_hole_zpos-25]) rotate([0,90,0]) cylinder(r=7.5/2,h=15);
+
 		translate([0,0,6])cylinder(r=pdiam(bearing625_OD)/2,h=m5_cap_H+bearing625_height+1);//bearing cutout
 		translate([0,0,bearing625_height+1+driven_gear_length+driven_gear_hub_length+filament_drive_gear_length+filament_drive_gear_hub_length+bearing_wall])cylinder(r=pdiam(bearing625_OD)/2,h=m5_cap_H+bearing625_height+1);//bearing cutout
 		translate([0,0,-1])cylinder(r=(bearing625_OD-3)/2,h=driven_shaft_length*2);//driven shaft cutout
@@ -94,6 +98,7 @@ module base_plate(){
 			// hotend cutout
 			rotate([0,90,0]) cylinder(r=hotend_diameter/2,h=20);
 		}
+		
 	}
 }
 
@@ -147,3 +152,101 @@ module filament(){
 }
 
 
+
+
+
+
+module wadeidler() 
+{
+	difference()
+	{
+		union()
+		{
+			//The idler block.
+			translate(idler_axis+[-idler_height/2+2,+idler_long_side/2-idler_long_bottom,0])
+			cube([idler_height,idler_long_side,idler_short_side],center=true);
+
+			// The fulcrum Hinge
+			translate(idler_fulcrum)
+			rotate([0,0,-30])
+			{
+				cylinder(h=idler_short_side,r=idler_hinge_r,center=true,$fn=60);
+				translate([-idler_end_length/2,0,0])
+				cube([idler_end_length,idler_hinge_r*2,idler_short_side],center=true);
+			}		
+		}
+	
+		//Back of idler.
+		translate(idler_axis+[-idler_height/2+2-idler_height,
+			idler_long_side/2-idler_long_bottom-10,0])
+		cube([idler_height,idler_long_side,idler_short_side],center=true);
+
+		//Slot for idler fulcrum mount.
+		translate(idler_fulcrum)
+		{
+			cylinder(h=idler_short_side-2*idler_hinge_width,
+				r=idler_hinge_r+0.5,center=true,$fn=60);
+			rotate(-30)
+			translate([0,-idler_hinge_r-0.5,0])
+			cube([idler_hinge_r*2+1,idler_hinge_r*2+1,
+				idler_short_side-2*idler_hinge_width],center=true);
+		}
+
+		//Bearing cutout.
+		translate(idler_axis)
+		{
+			difference()
+			{
+				cylinder(h=idler_608_height,r=idler_608_diameter/2,
+					center=true,$fn=60);
+				for (i=[0,1])
+				rotate([180*i,0,0])
+				translate([0,0,6.9/2])
+				cylinder(r1=12/2,r2=16/2,h=2);
+			}
+			cylinder(h=idler_short_side-6,r=m8_diameter/2-0.25/*Tight*/,
+				center=true,$fn=20);
+		}
+
+		//Fulcrum hole.
+		translate(idler_fulcrum)
+		rotate(360/12)
+		cylinder(h=idler_short_side+2,r=m3_diameter/2-0.1,center=true,$fn=8);
+
+		//Nut trap for fulcrum screw.
+		translate(idler_fulcrum+[0,0,idler_short_side/2-idler_hinge_width-1])
+		rotate(360/16)
+		cylinder(h=3,r=m3_nut_diameter/2,$fn=6);
+
+		for(idler_screw_hole=[-1,1])
+		translate(idler_axis+[2-idler_height,0,0])
+		{
+			//Screw Holes.
+			translate([-1,idler_mounting_hole_up,
+				idler_screw_hole*idler_mounting_hole_across])
+			rotate([0,90,0])
+			{
+				cylinder(r=idler_mounting_hole_diameter/2,h=idler_height+2,$fn=16);
+				translate([0,idler_mounting_hole_elongation,0])
+				cylinder(r=idler_mounting_hole_diameter/2,h=idler_height+2,$fn=16);
+				translate([-idler_mounting_hole_diameter/2,0,0])
+				cube([idler_mounting_hole_diameter,idler_mounting_hole_elongation,
+					idler_height+2]);
+			}
+
+			// Rounded corners.
+			render()
+			translate([idler_height/2,idler_long_top,
+				idler_screw_hole*(idler_short_side/2)])
+			difference()
+			{
+				translate([0,-idler_corners_radius/2+0.5,-idler_screw_hole*(idler_corners_radius/2-0.5)])
+				cube([idler_height+2,idler_corners_radius+1,idler_corners_radius+1],
+					center=true);
+				rotate([0,90,0])
+				translate([idler_screw_hole*idler_corners_radius,-idler_corners_radius,0])
+				cylinder(h=idler_height+4,r=idler_corners_radius,center=true,$fn=40);
+			}
+		}
+	}
+}
