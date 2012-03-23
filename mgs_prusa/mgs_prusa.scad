@@ -46,13 +46,13 @@ bot_hex=7.5;
 
 rotate(a=90,v=[0,1,0]){
 //    translate([-shafts_distance/2,0,-(motor_height)/2])nema();
-	translate([-shafts_distance/2,0,5.5])motor_gear();
-	translate([shafts_distance/2-1,0,-0.1])driven_gear();
-	translate([-100,filament_hole_offset,filament_hole_zpos])rotate([0,90,0])filament();
-	translate([shafts_distance/2-2,3+(filament_drive_gear_teeth*gear_module+608_diam)/2,21.4+7])rotate([0,0,0])bearing_608();//idler bearing
+//	translate([-shafts_distance/2,0,5.5])motor_gear();
+//	translate([shafts_distance/2-1,0,-0.1])driven_gear();
+//	translate([-100,filament_hole_offset,filament_hole_zpos])rotate([0,90,0])filament();
+//	translate([shafts_distance/2-2,3+(filament_drive_gear_teeth*gear_module+608_diam)/2,21.4+7])rotate([0,0,0])bearing_608();//idler bearing
 
 	translate([shafts_distance/2,0,0])mounting_plate();
-	translate(v=[44,13,46]) rotate(a=90,v=[0,0,1]) rotate(a=180,v=[0,1,0]) wadeidler();
+//	translate(v=[44,13,46]) rotate(a=90,v=[0,0,1]) rotate(a=180,v=[0,1,0]) wadeidler();
 }
 
 module mounting_plate(){
@@ -79,7 +79,7 @@ module mounting_plate(){
 			// idler hinge mount			
 			translate(v=[11,15,27]) difference(){
 				cube(size=[10,6,11]);
-				translate(v=[4,3,-1]) cylinder(r=1.9,h=15);	
+				translate(v=[4,3,-1]) cylinder(r=1.5,h=15);	
 			}
 	
 			// big idler wall
