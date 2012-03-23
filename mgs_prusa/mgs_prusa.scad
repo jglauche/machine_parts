@@ -1,9 +1,7 @@
-//mgs_TC_v02
-//redid driven gear calculations, cleaned up parameters for positioning, rotated filament gear
-
 
 include<configuration.scad>
 include<nema_motor.scad>
+include <shapes.scad>
 
 $fn=36;
 gear_module = 0.5;
@@ -31,7 +29,7 @@ bearing625_OD=16.25;
 bearing625_height=5;
 bearing_wall=1.5;
 
-mounting_plate_A_height=5;
+mounting_plate_A_height=7;
 
 base_plate_height=7;
 base_plate_width=63.5;
@@ -42,7 +40,7 @@ filament_hole_zpos=24+filament_drive_gear_hub_length;
 filament_hole_offset=(filament_OD+filament_drive_gear_teeth*gear_module)/2;
 
 hotend_diameter = 17;
-
+bot_hex=7.5;
 
 
 
@@ -51,7 +49,7 @@ rotate(a=90,v=[0,1,0]){
 	translate([-shafts_distance/2,0,5.5])motor_gear();
 	translate([shafts_distance/2-1,0,-0.1])driven_gear();
 	translate([-100,filament_hole_offset,filament_hole_zpos])rotate([0,90,0])filament();
-	//translate([shafts_distance/2,3+(filament_drive_gear_teeth*gear_module+bearing625_OD)/2,21.4])rotate([0,0,0])bearing_625();//idler bearing
+	translate([shafts_distance/2-2,3+(filament_drive_gear_teeth*gear_module+608_diam)/2,21.4+7])rotate([0,0,0])bearing_608();//idler bearing
 
 	translate([shafts_distance/2,0,0])mounting_plate();
 	translate(v=[44,13,46]) rotate(a=90,v=[0,0,1]) rotate(a=180,v=[0,1,0]) wadeidler();
@@ -61,8 +59,14 @@ module mounting_plate(){
 	difference(){
 		union(){
 			translate([-shafts_distance,0,mounting_plate_A_height/2])color(PlasticBlue)cube([motor_OD,gear_module*driven_gear_teeth+2,mounting_plate_A_height],center=true);//motor mount
-			translate([0,0,mounting_plate_A_height/2])color(PlasticGreen)cube([gear_module*driven_gear_teeth+2,gear_module*driven_gear_teeth+2,mounting_plate_A_height],center=true);//motor mount
+			difference(){
+				// big motor mount wall
+				translate([0,0,mounting_plate_A_height/2])color(PlasticGreen)cube([gear_module*driven_gear_teeth+2,gear_module*driven_gear_teeth+2,mounting_plate_A_height],center=true);//motor mount
+				// edge cutout for better access to the hinge and extruder mounting bolt, 				
+				translate([-2,21,0]) rotate(a=-20,v=[0,0,1]) cube(size=[30,10,10]);	
 			
+			}
+
 			translate([-1,0,0]){
 				//bearing holder/motor:
 				translate(v=[0,0,0]) bearing_post(22,bearing625_OD,bearing625_height,6);		
@@ -78,13 +82,27 @@ module mounting_plate(){
 				translate(v=[4,3,-1]) cylinder(r=1.9,h=15);	
 			}
 	
+			// big idler wall
+			difference(){
+				translate(v=[21,-18, 19]) rotate(a=90,v=[0,0,1]) cube(size=[7,45,28+4]);
+				translate(v=[-17,30,24]) rotate(a=90, v=[1,0,0]){		
+					cylinder(r=2.2, h=60);		
+					translate(v=[0,0,50]) hexagon(bot_hex,12);					
+				}
+				translate(v=[-17,30,40]) rotate(a=90, v=[1,0,0]){
+					 cylinder(r=2.2, h=60);		
+					translate(v=[0,0,50]) hexagon(bot_hex,12);	
+				}
+
+
+			}
 		}
 
 		translate([-1,0,0]){
 			translate([0,0,-1])cylinder(r=(bearing625_OD-3)/2,h=driven_shaft_length*2);//driven shaft cutout
 		}
 		// hole extend for extruder mount
-	//	#translate([(gear_module*driven_gear_teeth+2+base_plate_height)/2-0.01-15,filament_hole_offset,filament_hole_zpos-25]) rotate([0,90,0]) cylinder(r=7.5/2,h=15);
+		// translate([6,16,9]) rotate([0,90,0]) cylinder(r=7.5/2,h=15);
 
 		translate([-shafts_distance,0,0]){
 			translate([0,0,-0.5])cylinder(r=pdiam(motor_flange_dia+2)/2,h=mounting_plate_A_height+1); // motor flange cutout
