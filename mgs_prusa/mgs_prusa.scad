@@ -79,7 +79,7 @@ module mounting_plate(){
 			translate([(gear_module*driven_gear_teeth+2+base_plate_height)/2-0.01,0,filament_hole_zpos])color(PlasticBlue)base_plate();
 			
 			// idler hinge mount			
-			translate(v=[11,15,27]) difference(){
+			translate(v=[11,15,26]) difference(){
 				cube(size=[10+base_plate_height,9,12]);
 				translate(v=[4,4.5,-1]) cylinder(r=1.7,h=15);	
 			}
