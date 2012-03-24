@@ -44,11 +44,12 @@ hotend_diameter = 17;
 bot_hex=7.5;
 
 $fn = 120;
+drive_offset=1;
 
 rotate(a=90,v=[0,1,0]){
-//    translate([-shafts_distance/2,0,-(motor_height)/2])nema();
-//	translate([-shafts_distance/2,0,5.5])motor_gear();
-//	translate([shafts_distance/2-1,0,-0.1])driven_gear();
+ //   translate([-shafts_distance/2-drive_offset,0,-(motor_height)/2])nema();
+//	translate([-shafts_distance/2-drive_offset,0,5.5])motor_gear();
+//	translate([shafts_distance/2-drive_offset,0,-0.1])driven_gear();
 //	translate([-100,filament_hole_offset,filament_hole_zpos])rotate([0,90,0])filament();
 //	translate([shafts_distance/2-2,3+(filament_drive_gear_teeth*gear_module+608_diam)/2,21.4+7])rotate([0,0,0])bearing_608();//idler bearing
 
@@ -59,7 +60,7 @@ rotate(a=90,v=[0,1,0]){
 module mounting_plate(){
 	difference(){
 		union(){
-			translate([-shafts_distance,0,mounting_plate_A_height/2])color(PlasticBlue)cube([motor_OD,gear_module*driven_gear_teeth+2,mounting_plate_A_height],center=true);//motor mount
+			translate([-shafts_distance-drive_offset,0,mounting_plate_A_height/2])color(PlasticBlue)cube([motor_OD,gear_module*driven_gear_teeth+2,mounting_plate_A_height],center=true);//motor mount
 			difference(){
 				// big motor mount wall
 				translate([0,0,mounting_plate_A_height/2])color(PlasticGreen)cube([gear_module*driven_gear_teeth+2,gear_module*driven_gear_teeth+2,mounting_plate_A_height],center=true);//motor mount
@@ -68,7 +69,7 @@ module mounting_plate(){
 			
 			}
 
-			translate([-1,0,0]){
+			translate([-drive_offset,0,0]){
 				//bearing holder/motor:
 				translate(v=[0,0,0]) bearing_post(22,bearing625_OD,bearing625_height,6);		
 
@@ -110,8 +111,8 @@ module mounting_plate(){
 		// hole extend for extruder mount
 		// translate([6,16,9]) rotate([0,90,0]) cylinder(r=7.5/2,h=15);
 
-		translate([-shafts_distance,0,0]){
-			#translate([0,0,7.5])rotate(a=90,v=[0,1,0])rotate(a=180,v=[1,0,0])teardrop(pdiam(motor_flange_dia+2)/2,mounting_plate_A_height+1); // motor flange cutout
+		translate([-shafts_distance-drive_offset,0,0]){
+			translate([0,0,7.5])rotate(a=90,v=[0,1,0])rotate(a=180,v=[1,0,0])teardrop(pdiam(motor_flange_dia+2)/2,mounting_plate_A_height+1); // motor flange cutout
 			
 
 			//mounting screw holes for motor:
