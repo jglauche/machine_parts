@@ -2,6 +2,7 @@
 include<configuration.scad>
 include<nema_motor.scad>
 include <shapes.scad>
+include <lib-teardrop.scad>
 
 $fn=36;
 gear_module = 0.5;
@@ -42,7 +43,7 @@ filament_hole_offset=(filament_OD+filament_drive_gear_teeth*gear_module)/2;
 hotend_diameter = 17;
 bot_hex=7.5;
 
-
+$fn = 120;
 
 rotate(a=90,v=[0,1,0]){
 //    translate([-shafts_distance/2,0,-(motor_height)/2])nema();
@@ -62,7 +63,7 @@ module mounting_plate(){
 			difference(){
 				// big motor mount wall
 				translate([0,0,mounting_plate_A_height/2])color(PlasticGreen)cube([gear_module*driven_gear_teeth+2,gear_module*driven_gear_teeth+2,mounting_plate_A_height],center=true);//motor mount
-				// edge cutout for better access to the hinge and extruder mounting bolt, 				
+				// edge cutout for better access to the hinge and extruder mounting bolt 				
 				translate([-2,21,0]) rotate(a=-20,v=[0,0,1]) cube(size=[30,10,10]);	
 			
 			}
@@ -78,13 +79,18 @@ module mounting_plate(){
 			
 			// idler hinge mount			
 			translate(v=[11,15,27]) difference(){
-				cube(size=[10,6,11]);
-				translate(v=[4,3,-1]) cylinder(r=1.5,h=15);	
+				cube(size=[10+base_plate_height,9,12]);
+				translate(v=[4,4.5,-1]) cylinder(r=1.7,h=15);	
 			}
 	
 			// big idler wall
 			difference(){
-				translate(v=[21,-18, 19]) rotate(a=90,v=[0,0,1]) cube(size=[7,45,28+4]);
+				union(){
+					translate(v=[21,-18, 19]) rotate(a=90,v=[0,0,1]) cube(size=[7,45,28+4]);
+					// connect walls for structural reinforcement				
+					translate(v=[21,-18, 7]) rotate(a=90,v=[0,0,1]) cube(size=[7,3,12]);				
+					translate(v=[-20,-18, 7]) rotate(a=90,v=[0,0,1]) cube(size=[6,4,12]);
+				}
 				translate(v=[-17,30,24]) rotate(a=90, v=[1,0,0]){		
 					cylinder(r=2.2, h=60);		
 					translate(v=[0,0,50]) hexagon(bot_hex,12);					
@@ -105,12 +111,15 @@ module mounting_plate(){
 		// translate([6,16,9]) rotate([0,90,0]) cylinder(r=7.5/2,h=15);
 
 		translate([-shafts_distance,0,0]){
-			translate([0,0,-0.5])cylinder(r=pdiam(motor_flange_dia+2)/2,h=mounting_plate_A_height+1); // motor flange cutout
+			#translate([0,0,7.5])rotate(a=90,v=[0,1,0])rotate(a=180,v=[1,0,0])teardrop(pdiam(motor_flange_dia+2)/2,mounting_plate_A_height+1); // motor flange cutout
+			
+
 			//mounting screw holes for motor:
 			translate([motor_mounting_hole_distance/2,motor_mounting_hole_distance/2,-0.5])cylinder(r=motor_mounting_hole_diam/2,h=mounting_plate_A_height+1);
 			translate([-motor_mounting_hole_distance/2,motor_mounting_hole_distance/2,-0.5])cylinder(r=motor_mounting_hole_diam/2,h=mounting_plate_A_height+1);
 			translate([-motor_mounting_hole_distance/2,-motor_mounting_hole_distance/2,-0.5])cylinder(r=motor_mounting_hole_diam/2,h=mounting_plate_A_height+1);
-			translate([motor_mounting_hole_distance/2,-motor_mounting_hole_distance/2,-0.5])cylinder(r=motor_mounting_hole_diam/2,h=mounting_plate_A_height+1);
+			// this one is not accessable
+			//translate([motor_mounting_hole_distance/2,-motor_mounting_hole_distance/2,-0.5])cylinder(r=motor_mounting_hole_diam/2,h=mounting_plate_A_height+1);
 		}
 	}
 }
