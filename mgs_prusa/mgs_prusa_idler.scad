@@ -1,5 +1,5 @@
 include<configuration.scad>
-// next stuff is copied from PrusaMendel
+// next stuff is copied from PrusaMendel, merged with Guidler stuff from GregFrost
 
 wade_block_height=55;
 wade_block_width=24;
@@ -46,21 +46,23 @@ idler_fulcrum=idler_axis-[0,idler_fulcrum_offset,0];
 idler_corners_radius=4; 
 idler_height=12;
 idler_608_diameter=608_diameter+2;
-idler_608_height=9;
+idler_608_height=8;
 idler_mounting_hole_across=8;
 idler_mounting_hole_up=15;
 idler_short_side=wade_block_depth-2;
 idler_hinge_r=m3_diameter/2+3.5;
 idler_hinge_width=6.5;
 idler_end_length=(idler_height-2)+5;
-idler_mounting_hole_diameter=m3_diameter+0.25;
-idler_mounting_hole_elongation=1;
-idler_long_top=idler_mounting_hole_up+idler_mounting_hole_diameter/2+idler_mounting_hole_elongation+2.5;
+idler_mounting_hole_diameter=m4_diameter+0.5;
+idler_mounting_hole_elongation=4;
+idler_long_top=idler_mounting_hole_up+idler_mounting_hole_diameter/2+idler_mounting_hole_elongation+2.5+1;
 idler_long_bottom=idler_fulcrum_offset;
 idler_long_side=idler_long_top+idler_long_bottom;
 
+guide_height=12.3;
+guide_length=10;
 
-wadeidler();
+rotate(a=-90,v=[0,1,0]) wadeidler();
 
 module wadeidler() 
 {
@@ -69,8 +71,13 @@ module wadeidler()
 		union()
 		{
 			//The idler block.
-			translate(idler_axis+[-idler_height/2+2,+idler_long_side/2-idler_long_bottom,0])
-			cube([idler_height,idler_long_side,idler_short_side],center=true);
+			translate(idler_axis+[-idler_height/2+2,+idler_long_side/2-idler_long_bottom,0]){
+				cube([idler_height,idler_long_side,idler_short_side],center=true);
+
+		        //Filament Guide.
+		        translate([guide_height/2+idler_height/2-1,idler_long_side/2-guide_length/2,0])
+			        cube([guide_height+1,guide_length,8],center=true);
+	        }
 
 			// The fulcrum Hinge
 			translate(idler_fulcrum)
@@ -81,6 +88,15 @@ module wadeidler()
 				cube([idler_end_length,idler_hinge_r*2,idler_short_side],center=true);
 			}		
 		}
+		//Filament Path	
+		translate(idler_axis+[2+guide_height,+idler_long_side-idler_long_bottom-guide_length/2,0])
+		{
+		cube([7,guide_length+2,3.5],center=true);
+		translate([-7/2,0,0])
+		rotate([90,0,0])
+		cylinder(h=guide_length+4,r=3.5/2,center=true,$fn=66);
+		}
+
 	
 		//Back of idler.
 		translate(idler_axis+[-idler_height/2+2-idler_height,
@@ -105,10 +121,10 @@ module wadeidler()
 			{
 				cylinder(h=idler_608_height,r=idler_608_diameter/2,
 					center=true,$fn=60);
-				for (i=[0,1])
-				rotate([180*i,0,0])
-				translate([0,0,6.9/2])
-				cylinder(r1=12/2,r2=16/2,h=2);
+			//	for (i=[0,1])
+			//	rotate([180*i,0,0])
+			//	translate([0,0,6.9/2])
+			//	cylinder(r1=12/2,r2=16/2,h=2);
 			}
 			cylinder(h=idler_short_side-6,r=m8_diameter/2-0.25/*Tight*/,
 				center=true,$fn=20);
@@ -117,12 +133,12 @@ module wadeidler()
 		//Fulcrum hole.
 		translate(idler_fulcrum)
 		rotate(360/12)
-		cylinder(h=idler_short_side+2,r=m3_diameter/2-0.1,center=true,$fn=8);
+		cylinder(h=idler_short_side+2,r=m3_diameter/2+0.2,center=true,$fn=80);
 
 		//Nut trap for fulcrum screw.
 		translate(idler_fulcrum+[0,0,idler_short_side/2-idler_hinge_width-1])
 		rotate(360/16)
-		cylinder(h=3,r=m3_nut_diameter/2,$fn=6);
+		cylinder(h=3,r=m3_nut_diameter/2+0.1,$fn=6);
 
 		for(idler_screw_hole=[-1,1])
 		translate(idler_axis+[2-idler_height,0,0])
