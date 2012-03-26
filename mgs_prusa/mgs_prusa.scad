@@ -74,10 +74,12 @@ module mounting_plate(){
 				translate(v=[0,0,0]) bearing_post(22,bearing625_OD,bearing625_height,6);		
 
 				//bearing holder/idler
-				translate(v=[0,0,35+bearing625_height+6+5]) rotate(a=180,v=[1,0,0]) bearing_post(22,bearing625_OD,bearing625_height,4);		
+				translate(v=[0,0,35+bearing625_height+6+5]) rotate(a=180,v=[1,0,0]) bearing_post(22,bearing625_OD,bearing625_height,4,1);		
 			}	
-			translate([(gear_module*driven_gear_teeth+2+base_plate_height)/2-0.01,0,filament_hole_zpos])color(PlasticBlue)base_plate();
-			
+			difference(){
+				translate([(gear_module*driven_gear_teeth+2+base_plate_height)/2-0.01,0,filament_hole_zpos])color(PlasticBlue)base_plate();
+				translate(v=[-50,-18,mounting_plate_A_height])rotate(a=90,v=[1,0,0])cube(size=[100,100,5]);			
+			}		
 			// idler hinge mount			
 			translate(v=[11,15,26]) difference(){
 				cube(size=[10+base_plate_height,9,12]);
@@ -125,14 +127,14 @@ module mounting_plate(){
 	}
 }
 
-module bearing_post(height, bearing_diameter, bearing_height, wall_thickness=3){
+module bearing_post(height, bearing_diameter, bearing_height, wall_thickness=3,extra_cutout=0){
 	total_height = bearing_height+wall_thickness;	
 	difference(){
 		union(){
 			translate(v=[height/2,0,total_height/2]) cube([height, bearing_diameter*1.5, total_height],center=true);
 			cylinder(r=bearing_diameter*1.5/2,h=total_height);
 		}
-		translate(v=[0,0,wall_thickness]) cylinder(r=bearing_diameter/2, h=bearing_height);
+		translate(v=[0,0,wall_thickness-extra_cutout]) cylinder(r=bearing_diameter/2, h=bearing_height+extra_cutout);
 	}
 }
 
