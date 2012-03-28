@@ -49,8 +49,8 @@ drive_offset=1;
 
 rotate(a=90,v=[0,1,0]){
  //   translate([-shafts_distance/2-drive_offset,0,-(motor_height)/2])nema();
-	translate([-shafts_distance/2-drive_offset,0,5.5])motor_gear();
-	translate([shafts_distance/2-drive_offset,0,-0.1])driven_gear();
+//	translate([-shafts_distance/2-drive_offset,0,5.5])motor_gear();
+//	translate([shafts_distance/2-drive_offset,0,-0.1])driven_gear();
 //	translate([-100,filament_hole_offset,filament_hole_zpos])rotate([0,90,0])filament();
 //	translate([shafts_distance/2-2,3+(filament_drive_gear_teeth*gear_module+608_diam)/2,21.4+7])rotate([0,0,0])bearing_608();//idler bearing
 
@@ -156,7 +156,7 @@ module base_plate(){
 				difference(){
 					translate(v=[-base_plate_height-1,0,0]) rotate(a=90,v=[0,1,0]) cylinder(r2=(hotend_diameter+5)/2,r1=2.5,h=15);
 					// needs to be drilled out										
-					translate(v=[-9.6,0,0]) rotate(a=90,v=[0,1,0]) cylinder(r=filament_diameter,h=15);			
+					translate(v=[-9.6,0,0]) rotate(a=90,v=[0,1,0]) cylinder(r=(filament_OD+0.5)/2,h=15);			
 				}
 			}
 		}
