@@ -46,10 +46,11 @@ bot_hex=7.5;
 $fn = 120;
 drive_offset=1;
 
+
 rotate(a=90,v=[0,1,0]){
  //   translate([-shafts_distance/2-drive_offset,0,-(motor_height)/2])nema();
-//	translate([-shafts_distance/2-drive_offset,0,5.5])motor_gear();
-//	translate([shafts_distance/2-drive_offset,0,-0.1])driven_gear();
+	translate([-shafts_distance/2-drive_offset,0,5.5])motor_gear();
+	translate([shafts_distance/2-drive_offset,0,-0.1])driven_gear();
 //	translate([-100,filament_hole_offset,filament_hole_zpos])rotate([0,90,0])filament();
 //	translate([shafts_distance/2-2,3+(filament_drive_gear_teeth*gear_module+608_diam)/2,21.4+7])rotate([0,0,0])bearing_608();//idler bearing
 
@@ -76,9 +77,15 @@ module mounting_plate(){
 				//bearing holder/idler
 				translate(v=[0,0,35+bearing625_height+6+5]) rotate(a=180,v=[1,0,0]) bearing_post(22,bearing625_OD,bearing625_height,4,1);		
 			}	
+			// base plate
 			difference(){
 				translate([(gear_module*driven_gear_teeth+2+base_plate_height)/2-0.01,0,filament_hole_zpos])color(PlasticBlue)base_plate();
-				translate(v=[-50,-18,mounting_plate_A_height])rotate(a=90,v=[1,0,0])cube(size=[100,100,5]);			
+				// cut it on the idler wall side to fit belt clamps on the carriage
+				translate(v=[-50,-17,mounting_plate_A_height])rotate(a=90,v=[1,0,0])cube(size=[100,100,5]);			
+				//cut the excess material on the edges too
+				translate(v=[0,-27,42])rotate(a=45,v=[1,0,0])cube(size=[40,40,15]);		
+				translate(v=[0,-5,72])rotate(a=-45,v=[1,0,0])cube(size=[40,40,15]);		
+
 			}		
 			// idler hinge mount			
 			translate(v=[11,15,26]) difference(){
@@ -89,10 +96,10 @@ module mounting_plate(){
 			// big idler wall
 			difference(){
 				union(){
-					translate(v=[21,-18, 19]) rotate(a=90,v=[0,0,1]) cube(size=[7,45,28+4]);
+					translate(v=[21,-17, 19]) rotate(a=90,v=[0,0,1]) cube(size=[6,45,28+4]);
 					// connect walls for structural reinforcement				
-					translate(v=[21,-18, 7]) rotate(a=90,v=[0,0,1]) cube(size=[7,3,12]);				
-					translate(v=[-20,-18, 7]) rotate(a=90,v=[0,0,1]) cube(size=[6,4,12]);
+					translate(v=[21,-17, 7]) rotate(a=90,v=[0,0,1]) cube(size=[6,3,12]);				
+					translate(v=[-20,-17, 7]) rotate(a=90,v=[0,0,1]) cube(size=[5,4,12]);
 				}
 				translate(v=[-17,30,24]) rotate(a=90, v=[1,0,0]){		
 					cylinder(r=2.2, h=60);		
@@ -142,7 +149,19 @@ module bearing_post(height, bearing_diameter, bearing_height, wall_thickness=3,e
 
 module base_plate(){
 	difference(){
-		cube([base_plate_height,base_plate_depth,base_plate_width],center=true);	
+		union(){
+			cube([base_plate_height,base_plate_depth,base_plate_width],center=true);	
+			translate([-10,filament_hole_offset,0]){
+				// filament feeding cone
+				difference(){
+					translate(v=[-base_plate_height-1,0,0]) rotate(a=90,v=[0,1,0]) cylinder(r2=(hotend_diameter+5)/2,r1=2.5,h=15);
+					// needs to be drilled out										
+					translate(v=[-9.6,0,0]) rotate(a=90,v=[0,1,0]) cylinder(r=filament_diameter,h=15);			
+				}
+			}
+		}
+
+
 		translate([-10,filament_hole_offset,0]){
 			rotate(a=23, v=[1,0,0]){
 				//wades mounting holes:
@@ -150,7 +169,7 @@ module base_plate(){
 				translate([0,0,-25])rotate([0,90,0])cylinder(r=4/2,h=20);
 			}			
 			// hotend cutout
-			rotate([0,90,0]) cylinder(r=hotend_diameter/2,h=20);
+			translate(v=[6,0,0]) rotate([0,90,0]) cylinder(r=hotend_diameter/2,h=20);
 		}
 		
 	}
