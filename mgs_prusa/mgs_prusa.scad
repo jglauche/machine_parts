@@ -1,4 +1,15 @@
 
+/*
+* BOM
+* 2x 625ZZ
+* 1x M5x40 (flatten the thread side with a rotary grinder)
+* 3x M3x10
+* 3x M3 Nut
+* 1x M3x25
+* 2x M3x20
+* 
+*/
+
 include<configuration.scad>
 include<nema_motor.scad>
 include <shapes.scad>
@@ -75,7 +86,7 @@ module mounting_plate(){
 				translate(v=[0,0,0]) bearing_post(22,bearing625_OD,bearing625_height,6);		
 
 				//bearing holder/idler
-				translate(v=[0,0,35+bearing625_height+6+5]) rotate(a=180,v=[1,0,0]) bearing_post(22,bearing625_OD,bearing625_height,4,1);		
+				translate(v=[0,0,35+bearing625_height+6+5]) rotate(a=180,v=[1,0,0]) bearing_post(22,bearing625_OD,bearing625_height,4,2);		
 			}	
 			// base plate
 			difference(){
@@ -154,9 +165,9 @@ module base_plate(){
 			translate([-10,filament_hole_offset,0]){
 				// filament feeding cone
 				difference(){
-					translate(v=[-base_plate_height-1,0,0]) rotate(a=90,v=[0,1,0]) cylinder(r2=(hotend_diameter+5)/2,r1=2.5,h=15);
+					translate(v=[-base_plate_height-1,0,0]) rotate(a=90,v=[0,1,0]) cylinder(r2=(hotend_diameter+5)/2,r1=3,h=15);
 					// needs to be drilled out										
-					translate(v=[-9.6,0,0]) rotate(a=90,v=[0,1,0]) cylinder(r=(filament_OD+0.5)/2,h=15);			
+					translate(v=[-9.4,0,0]) rotate(a=90,v=[0,1,0]) cylinder(r=(filament_OD+0.5)/2,h=15);			
 				}
 			}
 		}
