@@ -92,9 +92,9 @@ module mounting_plate(){
 			difference(){
 				translate([(gear_module*driven_gear_teeth+2+base_plate_height)/2-0.01,0,filament_hole_zpos])color(PlasticBlue)base_plate();
 				// cut it on the idler wall side to fit belt clamps on the carriage
-				translate(v=[-50,-17,mounting_plate_A_height])rotate(a=90,v=[1,0,0])cube(size=[100,100,5]);			
+				//translate(v=[-50,-17,mounting_plate_A_height])rotate(a=90,v=[1,0,0])cube(size=[100,100,5]);			
 				//cut the excess material on the edges too
-				translate(v=[0,-27,42])rotate(a=45,v=[1,0,0])cube(size=[40,40,15]);		
+				translate(v=[10,-27-12,42])rotate(a=45,v=[1,0,0])cube(size=[40,40,15]);		
 				translate(v=[0,-5,72])rotate(a=-45,v=[1,0,0])cube(size=[40,40,15]);		
 
 			}		
@@ -107,11 +107,12 @@ module mounting_plate(){
 			// big idler wall
 			difference(){
 				union(){
-					translate(v=[21,-17, 19]) rotate(a=90,v=[0,0,1]) cube(size=[6,45,28+4]);
+					translate(v=[21,-17-4, 19]) rotate(a=90,v=[0,0,1]) cube(size=[6+4,45,28+4+9]);
 					// connect walls for structural reinforcement				
 					translate(v=[21,-17, 7]) rotate(a=90,v=[0,0,1]) cube(size=[6,3,12]);				
 					translate(v=[-20,-17, 7]) rotate(a=90,v=[0,0,1]) cube(size=[5,4,12]);
 				}
+				
 				translate(v=[-17,30,24]) rotate(a=90, v=[1,0,0]){		
 					cylinder(r=2.2, h=60);		
 					translate(v=[0,0,50]) hexagon(bot_hex,12);					
@@ -120,7 +121,9 @@ module mounting_plate(){
 					 cylinder(r=2.2, h=60);		
 					translate(v=[0,0,50]) hexagon(bot_hex,12);	
 				}
-
+				// mounting holes for i3 carriage
+				translate(v=[8,-10,26]) rotate(a=90, v=[1,0,0]) cylinder(r=1.7,h=20);
+				#translate(v=[8,-10,26+30]) rotate(a=90, v=[1,0,0]) cylinder(r=1.7,h=20);
 
 			}
 		}
