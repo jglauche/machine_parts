@@ -65,11 +65,16 @@ rotate(a=90,v=[0,1,0]){
 //	translate([-100,filament_hole_offset,filament_hole_zpos])rotate([0,90,0])filament();
 //	translate([shafts_distance/2-2,3+(filament_drive_gear_teeth*gear_module+608_diam)/2,21.4+7])rotate([0,0,0])bearing_608();//idler bearing
 
-	translate([shafts_distance/2,0,0])mounting_plate();
+
+//	translate([shafts_distance/2,0,0])mgs();
+    rotate([0,180,0]) fan_mount();
+
+
 //	translate(v=[44,13,46]) rotate(a=90,v=[0,0,1]) rotate(a=180,v=[0,1,0]) wadeidler();
 }
 
-module mounting_plate(){
+
+module mgs(){
 	difference(){
 		union(){
 			translate([-shafts_distance-drive_offset,0,mounting_plate_A_height/2])color(PlasticBlue)cube([motor_OD,gear_module*driven_gear_teeth+2,mounting_plate_A_height],center=true);//motor mount
@@ -89,15 +94,7 @@ module mounting_plate(){
 				translate(v=[0,0,35+bearing625_height+6+5]) rotate(a=180,v=[1,0,0]) bearing_post(22,bearing625_OD,bearing625_height,4,2);		
 			}	
 			// base plate
-			difference(){
-				translate([(gear_module*driven_gear_teeth+2+base_plate_height)/2-0.01,0,filament_hole_zpos])color(PlasticBlue)base_plate();
-				// cut it on the idler wall side to fit belt clamps on the carriage
-				//translate(v=[-50,-17,mounting_plate_A_height])rotate(a=90,v=[1,0,0])cube(size=[100,100,5]);			
-				//cut the excess material on the edges too
-				translate(v=[10,-27-12,42])rotate(a=45,v=[1,0,0])cube(size=[40,40,15]);		
-				translate(v=[0,-5,72])rotate(a=-45,v=[1,0,0])cube(size=[40,40,15]);		
-
-			}		
+            cut_base_plate();	
 			// idler hinge mount			
 			translate(v=[11,15,26]) difference(){
 				cube(size=[10+base_plate_height,9,12]);
@@ -190,7 +187,89 @@ module base_plate(){
 }
 
 
+module cut_base_plate(){
+    difference(){
+	    translate([(gear_module*driven_gear_teeth+2+base_plate_height)/2-0.01,0,filament_hole_zpos])color(PlasticBlue)base_plate();
+	    // cut it on the idler wall side to fit belt clamps on the carriage
+	    //translate(v=[-50,-17,mounting_plate_A_height])rotate(a=90,v=[1,0,0])cube(size=[100,100,5]);			
+	    //cut the excess material on the edges too
+	    translate(v=[10,-27-12,42])rotate(a=45,v=[1,0,0])cube(size=[40,40,15]);		
+	    translate(v=[0,-5,72])rotate(a=-45,v=[1,0,0])cube(size=[40,40,15]);		
 
+    }	
+}
+
+groovemount_radius = 5.9250;
+groovemount_thickness = 4.7;
+// this code is a mess (but way better than drawing this in 2d)
+module mgs_groovemount(){
+    difference(){
+    
+        union(){
+            cut_base_plate();	
+            // fill hotend cutout.
+            translate([-10,filament_hole_offset,0]){
+                translate(v=[38-groovemount_thickness-2,0,31.8]) rotate([0,90,0]) cylinder(r=hotend_diameter/2+2,h=groovemount_thickness+2);
+            }
+        }
+        // cut groovemount
+        translate([-10,filament_hole_offset,0]){
+            
+            translate(v=[33.4-2,0,31.8]) rotate([0,90,0]) cylinder(r=groovemount_radius,h=groovemount_thickness+2,$fn=64);
+        
+            translate(v=[30,-50,20+groovemount_radius]) cube([10,50,groovemount_radius*2]);
+        
+        }
+
+        // cut everything on top of the desired base plate    
+        translate([0,-50,-50]) cube([28-groovemount_thickness,100,200]);	
+        
+    
+    }
+}
+// note: continue below the plate and then rotate it 180 for printing
+module fan_mount(){
+    difference(){    
+        union(){
+           // translate([18,5,32]) rotate([90,0,90]) hotend();
+            mgs_groovemount();
+            translate([23.3,20,0]) cube([37,6,46]);
+            translate([23.3,-12,0]) cube([37,6,26]);
+            translate([23.3,20,43]) rotate([90,0,0]) cube([37,3,39]);
+
+        
+        }
+        translate([22,-13,-10]) fan_40mm(); 
+        translate([23.3,-38,0]) cube([37,26,86]);
+
+
+    }
+}
+
+// without head, measurements for j-head mk-v
+module hotend(){
+    union(){
+        cylinder(r=6, h=40);
+        cylinder(r=8, h=5);
+        translate([0,0,10]) cylinder(r=8, h=30);    
+    }
+}
+ 
+module fan_40mm(){
+    union(){
+       difference(){
+           cube([40,40,10]);
+       //    translate([20,20,-1]) cylinder(r=19,h=22);
+       }
+       // holes for bolts. make them male to be able to substract later
+       translate([4,4,-1]) cylinder(r=1.4,h=22); 
+       translate([4,4+32,-1]) cylinder(r=1.4,h=22); 
+       translate([4+32,4,-1]) cylinder(r=1.4,h=22); 
+       translate([4+32,4+32,-1]) cylinder(r=1.4,h=22); 
+
+   }
+
+}
 
 module motor_gear(){
 	color(Stainless)cylinder(r1=motor_gear_mounting_part_dia/2,r2=(gear_module*motor_gear_teeth+1)/2,h=motor_gear_mounting_part_length);
