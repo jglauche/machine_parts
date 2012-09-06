@@ -199,7 +199,7 @@ module cut_base_plate(){
     }	
 }
 
-groovemount_radius = 5.9250;
+groovemount_radius = 6;
 groovemount_thickness = 4.7;
 // this code is a mess (but way better than drawing this in 2d)
 module mgs_groovemount(){
@@ -217,7 +217,7 @@ module mgs_groovemount(){
             
             translate(v=[33.4-2,0,31.8]) rotate([0,90,0]) cylinder(r=groovemount_radius,h=groovemount_thickness+2,$fn=64);
         
-            translate(v=[30,-50,20+groovemount_radius]) cube([10,50,groovemount_radius*2]);
+            translate(v=[30,-50,19.8+groovemount_radius]) cube([10,50,groovemount_radius*2]);
         
         }
 
@@ -233,18 +233,18 @@ module fan_mount(){
         union(){
            // translate([18,5,32]) rotate([90,0,90]) hotend();
             mgs_groovemount();
-            translate([23.3,20,0]) cube([37,6,46]);
-            translate([23.3,-12,0]) cube([37,6,26]);
+            translate([23.3,20,0]) cube([37,6,47]);
+            translate([23.3,-12,0]) cube([37,6,21]);
             difference(){
-                translate([23.3,20,43]) rotate([90,0,0]) cube([37,3,39]);
+                translate([23.3,20,44]) rotate([90,0,0]) cube([37,3,39]);
                 // cutout for extruder wires
-                translate([55,5,41]) cube([7,6,6]); 
-                translate([55,5+3,41]) cylinder(r=3,h=10);                                
+                translate([50,5,42]) cube([13,6,6]); 
+                translate([50,5+3,42]) cylinder(r=3,h=10);                                
             }
             // making a second wall to attach wires with zipties       
             difference(){
-                translate([23.3,17,46]) rotate([90,0,0]) cube([17,3,19]);
-                #translate([33,7,52]) rotate([0,90,0]) ziptie(6,3);
+                translate([23.3,17,47]) rotate([90,0,0]) cube([17,3,19]);
+                translate([33,7,53]) rotate([0,90,0]) ziptie(6,3);
             }
                            
         }
