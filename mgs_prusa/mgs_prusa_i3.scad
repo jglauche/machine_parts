@@ -235,14 +235,30 @@ module fan_mount(){
             mgs_groovemount();
             translate([23.3,20,0]) cube([37,6,46]);
             translate([23.3,-12,0]) cube([37,6,26]);
-            translate([23.3,20,43]) rotate([90,0,0]) cube([37,3,39]);
-
-        
+            difference(){
+                translate([23.3,20,43]) rotate([90,0,0]) cube([37,3,39]);
+                // cutout for extruder wires
+                translate([55,5,41]) cube([7,6,6]); 
+                translate([55,5+3,41]) cylinder(r=3,h=10);                                
+            }
+            // making a second wall to attach wires with zipties       
+            difference(){
+                translate([23.3,17,46]) rotate([90,0,0]) cube([17,3,19]);
+                #translate([33,7,52]) rotate([0,90,0]) ziptie(6,3);
+            }
+                           
         }
         translate([22,-13,-10]) fan_40mm(); 
         translate([23.3,-38,0]) cube([37,26,86]);
 
 
+    }
+}
+
+module ziptie(rad,height){
+    difference(){
+        cylinder(r=rad, h=height);
+        cylinder(r=rad-1, h=height);     
     }
 }
 
