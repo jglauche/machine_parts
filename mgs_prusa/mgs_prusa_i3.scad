@@ -66,8 +66,8 @@ rotate(a=90,v=[0,1,0]){
 //	translate([shafts_distance/2-2,3+(filament_drive_gear_teeth*gear_module+608_diam)/2,21.4+7])rotate([0,0,0])bearing_608();//idler bearing
 
 
-	translate([shafts_distance/2,0,0])mgs();
-//    rotate([0,180,0]) fan_mount();
+//	translate([shafts_distance/2,0,0])mgs();
+    rotate([0,180,0]) fan_mount();
 
 
 //	translate(v=[44,13,46]) rotate(a=90,v=[0,0,1]) rotate(a=180,v=[0,1,0]) wadeidler();
@@ -156,12 +156,25 @@ module bearing_post(height, bearing_diameter, bearing_height, wall_thickness=3,e
 	}
 }
 
+module bottom_plate_with_mounting_holes(){
+    difference(){
+        cube([base_plate_height,base_plate_depth,base_plate_width],center=true);
+		translate([-10,filament_hole_offset,0]){
+			rotate(a=23, v=[1,0,0]){
+				//wades mounting holes:
+				translate([0,0,25])rotate([0,90,0])cylinder(r=4/2,h=20);
+				translate([0,0,-25])rotate([0,90,0])cylinder(r=4/2,h=20);
+			}	        
+        }
+    }
+
+}
 
 
 module base_plate(){
 	difference(){
 		union(){
-			cube([base_plate_height,base_plate_depth,base_plate_width],center=true);	
+			bottom_plate_with_mounting_holes();	
 			translate([-10,filament_hole_offset,0]){
 				// filament feeding cone
 				difference(){
@@ -173,12 +186,7 @@ module base_plate(){
 		}
 
 
-		translate([-10,filament_hole_offset,0]){
-			rotate(a=23, v=[1,0,0]){
-				//wades mounting holes:
-				translate([0,0,25])rotate([0,90,0])cylinder(r=4/2,h=20);
-				translate([0,0,-25])rotate([0,90,0])cylinder(r=4/2,h=20);
-			}			
+		translate([-10,filament_hole_offset,0]){			
 			// hotend cutout
 			translate(v=[6,0,0]) rotate([0,90,0]) cylinder(r=hotend_diameter/2,h=20);
 		}
@@ -206,14 +214,9 @@ module mgs_groovemount(){
     difference(){
     
         union(){
-            cut_base_plate();	
-            // fill hotend cutout.
-            translate([-10,filament_hole_offset,0]){
-                translate(v=[38-groovemount_thickness-2,0,31.8]) rotate([0,90,0]) cylinder(r=hotend_diameter/2+2,h=groovemount_thickness+2);
-            }
-            // fill corner
-            #translate(v=[34.6-groovemount_thickness*2-2,1,41])cube([groovemount_thickness,20,20]);
-            
+            translate([24.5,0,31.8]) bottom_plate_with_mounting_holes();
+       
+
         }
         // cut groovemount
         translate([-10,filament_hole_offset,0]){
