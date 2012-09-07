@@ -68,7 +68,7 @@ rotate(a=90,v=[0,1,0]){
 
 //	translate([shafts_distance/2,0,0])mgs();
     rotate([0,180,0]) fan_mount();
-
+//    translate([4,0,0]) rotate([0,180,0]) mgs();
 
 //	translate(v=[44,13,46]) rotate(a=90,v=[0,0,1]) rotate(a=180,v=[0,1,0]) wadeidler();
 }
@@ -260,10 +260,6 @@ module fan_mount(){
         }
         translate([22,-13,-10]) fan_40mm(); 
         translate([23.3,-38,0]) cube([37,26,86]);
-
-        // optional fan
-        #translate([22,-23,53.5]) rotate([-90,0,0]) fan_40mm(); 
-        
     }
 }
 
