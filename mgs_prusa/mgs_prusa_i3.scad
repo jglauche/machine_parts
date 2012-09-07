@@ -242,6 +242,8 @@ module fan_mount(){
 
             translate([23.3,20,0]) cube([37,6,47+15]);
             translate([23.3,-12,0]) cube([37,6,21]);
+            translate([23.3,-12,46]) cube([37,4,15]);
+            
             translate([0,0,15]){
                 difference(){
                     translate([23.3,20,44]) rotate([90,0,0]) cube([37,3,39]);
@@ -259,7 +261,9 @@ module fan_mount(){
         translate([22,-13,-10]) fan_40mm(); 
         translate([23.3,-38,0]) cube([37,26,86]);
 
-
+        // optional fan
+        #translate([22,-23,53.5]) rotate([-90,0,0]) fan_40mm(); 
+        
     }
 }
 
