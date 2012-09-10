@@ -120,8 +120,10 @@ module mgs(){
 				}
 				// mounting holes for i3 carriage
 				translate(v=[8,-10,26]) rotate(a=90, v=[1,0,0]) cylinder(r=1.7,h=20);
-				#translate(v=[8,-10,26+30]) rotate(a=90, v=[1,0,0]) cylinder(r=1.7,h=20);
-
+				translate(v=[8,-10,26]) rotate(a=90, v=[1,0,0]) cylinder(r=2.8,h=3.5);
+				translate(v=[8,-10,26+30]) rotate(a=90, v=[1,0,0]) cylinder(r=1.7,h=20);
+				translate(v=[8,-10,26+30]) rotate(a=90, v=[1,0,0]) cylinder(r=2.8,h=3.5);
+    
 			}
 		}
 
