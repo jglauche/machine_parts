@@ -8,12 +8,12 @@ rotate([180,0,0]) difference(){
     cube([10,26,thickness]);
     translate([5,6,0]){
         cylinder(r=1.75, h=thickness);
-        cylinder(r=3.7, h=thickness-2, $fn=6);
+        #cylinder(r=3.7, h=thickness-2, $fn=6);
     }
     
     translate([5,20,0]){
         cylinder(r=1.9, h=thickness);
-        translate([0,0,2]) cylinder(r1=1.9,r2=3.4, h=3);       
+        #translate([0,0,4]) cylinder(r1=1.9,r2=3.4, h=3);       
    }    
 
 }
