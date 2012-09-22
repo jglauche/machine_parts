@@ -26,7 +26,6 @@ module dial_gauge_mount(){
         translate([x/2,0,40]) rotate([90,0,0])cylinder(r=dial_base_dia/2,h=25);  
         translate([x/2,-10,60]) rotate([0,0,0])cylinder(r=4.1,h=25);  
         translate([x/2,-8,60]) rotate([0,0,0])cylinder(r=4.1,h=25);  
-        translate([x/2,-7,60]) rotate([0,0,0])cylinder(r=4.1,h=25);  
         
         translate([5,y+0.1,6]) rotate([90,0,0]) cylinder(r=1.8, h=y+0.2);
         translate([5+space_between_holes,y+0.1,6]) rotate([90,0,0]) cylinder(r=1.8, h=y+0.2);
