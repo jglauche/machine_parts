@@ -1,4 +1,6 @@
 
+use <../mgs_prusa/nema_motor.scad>;
+
 $fn=32;
 
 space_between_holes = 30;
@@ -17,7 +19,7 @@ module dial_gauge_mount(){
 
     difference(){
         union(){
-            cube([x,y,z]);
+            cube([x,y,z+55]);
             translate([0,-8,40])cube([x,y+4,40]);
         
         }  
@@ -27,14 +29,22 @@ module dial_gauge_mount(){
         translate([x/2,-10,60]) rotate([0,0,0])cylinder(r=4.1,h=25);  
         translate([x/2,-8,60]) rotate([0,0,0])cylinder(r=4.1,h=25);  
         
-        translate([5,y+0.1,6]) rotate([90,0,0]) cylinder(r=1.8, h=y+0.2);
-        translate([5+space_between_holes,y+0.1,6]) rotate([90,0,0]) cylinder(r=1.8, h=y+0.2);
-
+        
      
         translate([5,10,75]) rotate([90,0,0]) cylinder(r=1.8, h=30);
        
         translate([5+space_between_holes,10,75]) rotate([90,0,0]) cylinder(r=1.8, h=30);
-            
+       // #translate([x/2,30,z+34]) rotate(a=90,v=[1,0,0]) nema();
+        translate([x/2,y+0.2,z+34]) rotate(a=90,v=[1,0,0]) cylinder(r=12,h=12);
+        // motor holes
+        translate([x/2-16,y+0.2,z+34-16]) rotate(a=90,v=[1,0,0]) cylinder(r=2,h=12);
+        translate([x/2-16,y+0.2,z+34+16]) rotate(a=90,v=[1,0,0]) cylinder(r=2,h=12);
+        translate([x/2+16,y+0.2,z+34-16]) rotate(a=90,v=[1,0,0]) cylinder(r=2,h=12);
+        translate([x/2+16,y+0.2,z+34+16]) rotate(a=90,v=[1,0,0]) cylinder(r=2,h=12);
+    
+        #translate([0,-1,-30])cube([x,y+4,40]);
+        
+    
     }
 
 }
@@ -55,13 +65,20 @@ module dial_gauge_clamp(){
 
 }
 
+module production(){
 rotate([-90,0,0]){
    dial_gauge_mount();
-   translate([0,-5,-12]) rotate([0,0,0]) dial_gauge_clamp();
+   #translate([-15,-5,52]) rotate([0,90,0]) dial_gauge_clamp();
 }
+}
+production();
 
-//   translate([0,-18,70]) dial_gauge_clamp();
-//   color("silver") translate([x/2,y-5,37]) rotate([90,180,0]) dial_gauge();
+module dev(){
+   dial_gauge_mount();
+   translate([0,-18,70]) dial_gauge_clamp();
+   color("silver") translate([x/2,y-5,37]) rotate([90,180,0]) dial_gauge();
+}
+//dev();
 
 module dial_gauge(){
     union(){
