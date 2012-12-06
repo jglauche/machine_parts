@@ -37,7 +37,7 @@ filament_drive_gear_hub_dia = 10;
 shafts_distance=(gear_module*(driven_gear_teeth+motor_gear_teeth))/2;
 echo(shafts_distance);
 
-bearing625_OD=16.25;
+bearing625_OD=16.25+0.2;
 bearing625_height=5;
 bearing_wall=1.5;
 
@@ -66,8 +66,8 @@ rotate(a=90,v=[0,1,0]){
 //	translate([shafts_distance/2-2,3+(filament_drive_gear_teeth*gear_module+608_diam)/2,21.4+7])rotate([0,0,0])bearing_608();//idler bearing
 
 
-//	translate([shafts_distance/2,0,0])mgs();
-      rotate([0,180,0]) fan_mount();
+	translate([shafts_distance/2,0,0])mgs();
+//      rotate([0,180,0]) fan_mount();
 //    translate([4,0,0]) rotate([0,180,0]) mgs();
 
 //	translate(v=[44,13,46]) rotate(a=90,v=[0,0,1]) rotate(a=180,v=[0,1,0]) wadeidler();
