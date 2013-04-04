@@ -65,9 +65,17 @@ rotate(a=90,v=[0,1,0]){
 //	translate([-100,filament_hole_offset,filament_hole_zpos])rotate([0,90,0])filament();
 //	translate([shafts_distance/2-2,3+(filament_drive_gear_teeth*gear_module+608_diam)/2,21.4+7])rotate([0,0,0])bearing_608();//idler bearing
 
+// normal mgs
+	//translate([shafts_distance/2,0,0])mgs();
+// mirrored mgs
+//	mirror([0,0,1]) translate([shafts_distance/2,0,0])mgs();
 
-	translate([shafts_distance/2,0,0])mgs();
-//      rotate([0,180,0]) fan_mount();
+// fan mount
+      rotate([0,180,0]) fan_mount();
+// mirrored fan mount
+//     mirror([0,0,1]) rotate([0,180,0]) fan_mount();
+
+
 //    translate([4,0,0]) rotate([0,180,0]) mgs();
 
 //	translate(v=[44,13,46]) rotate(a=90,v=[0,0,1]) rotate(a=180,v=[0,1,0]) wadeidler();
@@ -165,10 +173,10 @@ module bottom_plate_with_mounting_holes(nut_traps=false){
 			rotate(a=23, v=[1,0,0]){
 				//wades mounting holes:
 				translate([0,0,25])rotate([0,90,0])cylinder(r=4/2,h=20);
-				if (nut_traps) translate([11,0,25]) rotate([0,90,0]) cylinder(r=3.7, h=5, $fn=6); // nut trap
+				if (nut_traps) translate([11,0,25]) rotate([0,90,0]) cylinder(r=3.6, h=5, $fn=6); // nut trap
 				
 				translate([0,0,-25])rotate([0,90,0]) cylinder(r=4/2,h=20);
-			    if (nut_traps) translate([11,0,-25]) rotate([0,90,0]) cylinder(r=3.7, h=5, $fn=6); // nut trap
+			    if (nut_traps) translate([11,0,-25]) rotate([0,90,0]) cylinder(r=3.6, h=5, $fn=6); // nut trap
 				
 			
 			}	        
@@ -242,37 +250,44 @@ module mgs_groovemount(){
 }
 // note: continue below the plate and then rotate it 180 for printing
 module fan_mount(){
-    union(){
-        difference(){    
-            union(){
-               // translate([18,5,32]) rotate([90,0,90]) hotend();
-                mgs_groovemount();
+    difference(){
+        union(){
+            difference(){    
+                union(){
+                   // translate([18,5,32]) rotate([90,0,90]) hotend();
+                    mgs_groovemount();
 
-                translate([23.3,20,0]) cube([37,6,47+15]);
-                translate([23.3,-12,0]) cube([37,6,21]);
-                translate([23.3,-12,46]) cube([37,4,15]);
-                
-                translate([0,0,15]){
-                        translate([23.3,20,44]) rotate([90,0,0]) cube([37,3,39]);               
-                }                           
-            }
-            translate([22,-13,-10]) fan_40mm(); 
-            // big cuts
-            translate([23.3,-38,0]) cube([37,26,86]);
-            #translate([23.3,-18,62]) cube([37,50,10]);
-            
-            // cutout for extruder wiring     
-            translate([50,-13,36+15]) cube([13,6,6]); 
-            translate([50,-5,39+15]) rotate(a=90,v=[1,0,0]) cylinder(r=3,h=10);                                
+                    translate([23.3,20,0]) cube([37,6,47+15]);
+                    translate([23.3,-12,0]) cube([37,6,21]);
+                    // support for this wall:
+                    translate([23.3+6,-9,0]) rotate([0,0,45]) cube([3,6,21]);
                     
+                    translate([23.3,-12,46]) cube([37,4,15]);
+                    
+                    translate([0,0,15]){
+                            translate([23.3,20,44]) rotate([90,0,0]) cube([37,3,39]);               
+                    }                           
+                }
+                translate([22,-13,-10]) fan_40mm(); 
+                // big cuts
+                translate([23.3,-38,0]) cube([37,26,86]);
+                translate([23.3,-18,62]) cube([37,50,10]);
+                
+              
 
+            }
+            // extend one wall to attach wires with zipties       
+            difference(){
+                translate([23.3,-15,46]) rotate([0,0,0]) cube([37,3,16]);
+                translate([40.5,-18,54]) rotate([0,90,0]) ziptie(6,4);        
+            }
         }
-        // extend one wall to attach wires with zipties       
-        difference(){
-            translate([23.3,-15,46]) rotate([0,0,0]) cube([23,3,16]);
-            translate([40.5,-18,54]) rotate([0,90,0]) ziptie(6,4);        
-        }
-    }
+       // cutout for extruder wiring     
+            translate([50,-18,36+15]) cube([13,16,6]); 
+            
+            translate([50,-6,39+15]) rotate(a=90,v=[1,0,0]) cylinder(r=3,h=10);                                
+    }                
+
 }
 
 module ziptie(rad,height){
